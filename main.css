@@ -3,3 +3,11 @@ body {
   color: #fff;
 }
 
+.media img {
+  max-width: 50px;
+  border-radius: 20%;
+}
+
+/* .user-list {
+  color: black;
+} */
