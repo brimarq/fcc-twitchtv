@@ -1,37 +1,47 @@
 $(document).ready(function() {
 
+  const ttvUsers = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
 
-  var ttvUsers = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
+  function createListItem(data) {
+    var html = '';
+    var streaming = true;
 
-  var ttvData = [];
+    if (!data.stream) {
+      streaming = false;
+    }
 
-  function buildList(arr) {
-    arr.forEach(function(e) {
-      $('#user-list').append(
-        '<a href="' + e.url +'" target="_blank" class="list-group-item list-group-item-action flex-column flex-wrap list-group-item-success"><div class="media align-items-center"><img class="mr-3" src="' + e.logo + '" alt="logo"><div class="media-body"><div class="d-flex w-100 flex-wrap justify-content-between"><h5 class="mt-0">' + e.name + '</h5><small><span class="badge badge-pill py-1 badge-success">ONLINE</span></small></div><em>' + e.stream.game + e.stream.status + '</em></div><!-- .media-body --></div><!-- .media --></a>'
-      );
-    });
+    html += '<a href="';
+    html += data.url; 
+    html += '" target="_blank" class="list-group-item list-group-item-action flex-column flex-wrap ';
+    if (streaming) {
+      html += 'list-group-item-success">';
+    } else {
+      html += 'list-group-item-secondary">';
+    }
+    html += '<div class="media align-items-center">'
+    html += '<img class="mr-3" src="';
+    html += data.logo;
+    html += '" alt="logo">';
+    html += '<div class="media-body">';
+    html += '<div class="d-flex w-100 flex-wrap justify-content-between">';
+    html += '<h5 class="mt-0">';
+    html += data.name;
+    html += '</h5>';
+    html += '<small><span class="badge badge-pill py-1 ';
+    if (streaming) {
+      html += 'badge-success">ONLINE</span></small></div>';
+      html += '<em>'; 
+      html += data.stream; 
+      html += '</em>';
+    } else {
+      html += 'badge-secondary">OFFLINE</span></small></div>';
+    } 
+    html += '</div><!-- .media-body --></div><!-- .media --></a>';
+    $('#user-list').append(html);
   }
 
-// How to run funcs inside of append()?
 
 
-
-  $('#testApi').on('click', function() {
-
-    $.getJSON('https://wind-bow.gomix.me/twitch-api/users/freecodecamp?callback=?', function(data) {
-      console.log(data);
-    });
-
-    $.getJSON('https://wind-bow.gomix.me/twitch-api/channels/freecodecamp?callback=?', function(data) {
-      console.log(data);
-    });
-
-    $.getJSON('https://wind-bow.gomix.me/twitch-api/streams/freecodecamp?callback=?', function(data) {
-      var x = data;
-      console.log(x);
-    });
-  });
 
   $('#testArr').on('click', function() {
     ttvUsers.forEach(function(user) {
@@ -52,7 +62,8 @@ $(document).ready(function() {
 
       $.when(userPromise, channelPromise, streamPromise)
       .done(function(userData, channelData, streamData) {
-        ttvData.push({
+
+        let ttvData = {
           // 'userData': userData[0],
           // 'channelData': channelData[0],
           // 'streamData': streamData[0], 
@@ -61,27 +72,47 @@ $(document).ready(function() {
           'url': channelData[0].url,
           'stream': function() {
             if (!streamData[0].stream) {
-              return {
-                'game': '', 
-                'status': ''
-              }
+              return null;
             }
-            return {
-              'game': streamData[0].stream.game + ': ', 
-              'status': streamData[0].stream.channel.status
-            }
+            return streamData[0].stream.game + ': ' + streamData[0].stream.channel.status
           }() 
-        }); // ttvData.push() end
-        
-      }); // // $.when().done() end
+        }; 
+
+        console.log(ttvData);
+        createListItem(ttvData);
+        ttvData = {};
+
+      }); // // $.when().done()
       
-    }); // ttvUsers.forEach() end
-
-    console.log(ttvData);
-    buildList(ttvData); // Doesn't work on first click - WTF?
+    }); // ttvUsers.forEach()
     
-  }); // $('#testArr').on('click') end
-    
-  
+  }); // $('#testArr').on('click') 
 
-});
+  // $('#option1').on('click', function() {
+  //   $('#user-list > .list-group-item').show();
+  // });
+
+  // $('#option2').on('click', function() {
+  //   $('#user-list > .list-group-item-secondary').hide();
+  // });
+
+  // $('#option3').on('click', function() {
+  //   $('#user-list > .list-group-item-success').hide();
+  // });
+
+  $('input[type="radio"][name="selectStreams"]').change(function() {
+    if (this.value == 'all') {
+      $('#user-list').find('a.list-group-item').show();
+    }
+    else if (this.value == 'online') {
+      $('#user-list').find('a.list-group-item-success').show();
+      $('#user-list').find('a.list-group-item-secondary').hide();
+    } 
+    else if (this.value == 'offline') {
+      $('#user-list').find('a.list-group-item-secondary').show();
+      $('#user-list').find('a.list-group-item-success').hide();
+    }
+  });
+    
+}); // document.ready()
+
