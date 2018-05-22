@@ -13,10 +13,9 @@
   </head>
   <body>
     <div class="container">
-      <nav class="navbar">
-        <span class="navbar-brand mb-0 h1">Twitch TV Streams</span>
+      <nav class=" navbar flex-column flex-sm-row">
+        <span class="navbar-brand mb-0 mr-0 mr-sm-3 h1">Twitch TV Streams</span>
         
-
         <div id="stream-select" class="btn-group btn-group-toggle" data-toggle="buttons">
           <label class="btn btn-secondary active">
             <input type="radio" name="selectStreams" value="all" autocomplete="off" checked> All
@@ -27,45 +26,16 @@
           <label class="btn btn-secondary">
             <input type="radio" name="selectStreams" value="offline" autocomplete="off"> Offline
           </label>
-        </div>
-        
+        </div><!-- .btn-group -->
       </nav>
+
+      <div id="spinner" class="text-center weatherDiv" style="display: none">
+          <p>Loading weather</p>
+          <i class="fas fa-spinner fa-pulse fa-3x"></i>
+      </div>
       
-      <button id="testArr" class="btn btn-primary my-2 ml-2">Test Arr</button>
       
-      <div id="user-list" class="list-group">
-
-        <a href="#" class="list-group-item list-group-item-action flex-column flex-wrap align-items-start list-group-item-secondary">
-          <div class="media align-items-center">
-            <img class="mr-3" src="https://static-cdn.jtvnw.net/jtv_user_pictures/freecodecamp-profile_image-d9514f2df0962329-300x300.png" alt="Generic placeholder image">
-            <div class="media-body">
-              <div class="d-flex w-100 flex-wrap justify-content-between">
-                <h5 class="mt-0">FreeCodeCamp</h5>
-                <small><span class="badge badge-pill badge-secondary py-1">OFFLINE</span></small>
-              </div>
-              <em>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at.</em>
-            </div>
-          </div>
-        </a>
-
-        <a href="#" class="list-group-item list-group-item-action flex-column flex-wrap list-group-item-success">
-          <div class="media align-items-center">
-            <img class="mr-3" src="https://static-cdn.jtvnw.net/jtv_user_pictures/esl_sc2-profile_image-d6db9488cec97125-300x300.jpeg" alt="Generic placeholder image">
-            <div class="media-body">
-              <div class="d-flex w-100 flex-wrap justify-content-between">
-                <h5 class="mt-0">ESL_SC2</h5>
-                <small><span class="badge badge-pill py-1 badge-success">ONLINE</span></small>
-              </div>
-              <em>StarCraft II: RERUN: Hurricane [P] vs. Rogue [Z] - Ro12 - IEM Katowice 2018</em>
-              
-              <!-- Cras sit amet nibh libero, in gravida nulla.  -->
-            </div>
-          </div>
-        </a>
-
-
-
-      </div><!-- #user-list  -->
+      <div id="user-list" class="list-group"></div><!-- #user-list  -->
 
     </div><!-- .container -->
 

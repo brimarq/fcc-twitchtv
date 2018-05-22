@@ -2,6 +2,7 @@ $(document).ready(function() {
 
   const ttvUsers = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
 
+  // func for building each list item in the list group
   function createListItem(data) {
     var html = '';
     var streaming = true;
@@ -40,66 +41,46 @@ $(document).ready(function() {
     $('#user-list').append(html);
   }
 
-
-
-
-  $('#testArr').on('click', function() {
-    ttvUsers.forEach(function(user) {
+  // Get API data for each user in the ttvUsers array, then build its list item.
+  ttvUsers.forEach(function(user) {
       
-      var userData, channelData, streamData;
+    var userData, channelData, streamData;
 
-      var userPromise = $.getJSON('https://wind-bow.gomix.me/twitch-api/users/' + user + '?callback=?', function(data) {
-        return data;
-      });
+    var userPromise = $.getJSON('https://wind-bow.gomix.me/twitch-api/users/' + user + '?callback=?', function(data) {
+      return data;
+    });
 
-      var channelPromise = $.getJSON('https://wind-bow.gomix.me/twitch-api/channels/' + user + '?callback=?', function(data) {
-        return data;
-      });
+    var channelPromise = $.getJSON('https://wind-bow.gomix.me/twitch-api/channels/' + user + '?callback=?', function(data) {
+      return data;
+    });
 
-      var streamPromise = $.getJSON('https://wind-bow.gomix.me/twitch-api/streams/' + user + '?callback=?', function(data) {
-        return data;
-      });
+    var streamPromise = $.getJSON('https://wind-bow.gomix.me/twitch-api/streams/' + user + '?callback=?', function(data) {
+      return data;
+    });
 
-      $.when(userPromise, channelPromise, streamPromise)
-      .done(function(userData, channelData, streamData) {
+    $.when(userPromise, channelPromise, streamPromise)
+    .done(function(userData, channelData, streamData) {
 
-        let ttvData = {
-          // 'userData': userData[0],
-          // 'channelData': channelData[0],
-          // 'streamData': streamData[0], 
-          'name': userData[0].display_name, 
-          'logo': userData[0].logo, 
-          'url': channelData[0].url,
-          'stream': function() {
-            if (!streamData[0].stream) {
-              return null;
-            }
-            return streamData[0].stream.game + ': ' + streamData[0].stream.channel.status
-          }() 
-        }; 
+      let ttvData = { 
+        'name': userData[0].display_name, 
+        'logo': userData[0].logo, 
+        'url': channelData[0].url,
+        'stream': function() {
+          if (!streamData[0].stream) {
+            return null;
+          }
+          return streamData[0].stream.game + ': ' + streamData[0].stream.channel.status
+        }() 
+      }; 
 
-        console.log(ttvData);
-        createListItem(ttvData);
-        ttvData = {};
+      createListItem(ttvData);
+      ttvData = {};
 
-      }); // // $.when().done()
-      
-    }); // ttvUsers.forEach()
+    }); // // $.when().done()
     
-  }); // $('#testArr').on('click') 
+  }); // ttvUsers.forEach()
 
-  // $('#option1').on('click', function() {
-  //   $('#user-list > .list-group-item').show();
-  // });
-
-  // $('#option2').on('click', function() {
-  //   $('#user-list > .list-group-item-secondary').hide();
-  // });
-
-  // $('#option3').on('click', function() {
-  //   $('#user-list > .list-group-item-success').hide();
-  // });
-
+  // btn-group event handler
   $('input[type="radio"][name="selectStreams"]').change(function() {
     if (this.value == 'all') {
       $('#user-list').find('a.list-group-item').show();
